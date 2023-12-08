@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Http\Controllers\PageViewCountLinkCreationController;
+use App\Http\Controllers\PageViewCountLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,29 +16,19 @@ use Illuminate\Http\Request;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', [PageViewCountLinkCreationController::class, 'view'])->name('tracker.list');
+Route::get('/new_tracker_form', [PageViewCountLinkCreationController::class, 'index'])->name('tracker.create');
+Route::post('/new_tracker', [PageViewCountLinkCreationController::class, 'store'])->name('tracker.save');
+Route::get('/tracker/view', [PageViewCountLinkCreationController::class, 'index'])->name('tracker.view');
+Route::get('/customer/delete/{id}', [PageViewCountLinkCreationController::class, 'destroy'])->name('tracker.delete');
+Route::get('/customer/edit/{id}', [PageViewCountLinkCreationController::class, 'edit'])->name('tracker.edit');
+// Route::post('/customer/update/{id}',[CustomerController::class,'update'])->name('customer.update');
+
+Route::get('/track/{number}/{optional?}', [PageViewCountLogController::class, 'log'])->name('track.log');
 
 
-Route::get('/', function (Request $request) {
-    $headers_key = ['Host', 'connection', 'sec-ch-ua', 'sec-ch-ua-mobile', 'sec-ch-ua-platform', 'dnt', 'user-agent'];
-    foreach ($headers_key as $key) {
-        echo '<pre>';
-        $value = $request->header($key);
-        echo $key . ' : ' . $value;
-        echo '</pre>';
-    }
-    $clientIpAddress = $request->ip();
-    // If you are using a proxy server or load balancer
-    // $clientIpAddress = $request->getClientIp();
-    print_r($clientIpAddress);
-});
-
-Route::get('view_count/{name}/{id?}', function ($name, $id = null) {
-    echo $name;
-    die;
-    $data = compact('name', 'id');
-    print_r($data);
-    // return view('demowithdata')->with($data);
+Route::get('/date', function (Request $request) {
+    $now = new DateTime();
+    $str_now = str_replace("-", "", $now->format('Y-m-d'));
+    echo ($str_now);
 });
