@@ -24,7 +24,12 @@ Route::get('/customer/delete/{id}', [PageViewCountLinkCreationController::class,
 Route::get('/customer/edit/{id}', [PageViewCountLinkCreationController::class, 'edit'])->name('tracker.edit');
 // Route::post('/customer/update/{id}',[CustomerController::class,'update'])->name('customer.update');
 
+
+// Main link for performing all logic 
 Route::get('/track/{number}/{optional?}', [PageViewCountLogController::class, 'log'])->name('track.log');
+
+// Single Tracker Log view 
+Route::get('/tracker/logs/{number}/{optional?}', [PageViewCountLogController::class, 'logView'])->name('tracker.logs');
 
 
 Route::get('/date', function (Request $request) {

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('page_view_count_link_creations', function (Blueprint $table) {
             $table->string('tracking_no')->primary();
+            $table->string('friendly_name')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->string('host');
             $table->unsignedBigInteger('view_count');

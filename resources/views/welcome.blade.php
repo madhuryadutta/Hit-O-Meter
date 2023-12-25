@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @push('title')
-    <title>About US</title>
+    <title>Welcome</title>
 @endpush
 @section('main-section')
 

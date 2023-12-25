@@ -20,7 +20,7 @@ RUN echo "file_uploads = On\n" \
     "post_max_size = 500M\n" \
     "max_execution_time = 600\n" \
     > /usr/local/etc/php/conf.d/uploads.ini
-
+RUN echo 'ServerName 127.0.0.1' >> /etc/apache2/apache2.conf
 USER app
 
 WORKDIR /var/www/html
