@@ -9,8 +9,8 @@
   <div class="card">
     <div class="card-body">
       <h4 class="card-title">Tracker Info & Log</h4>
-      <h6 class="card-subtitle mb-2 text-muted">Total Views {{$tracker_info[0]->view_count}}</h6>
-      <h6 class="card-subtitle mb-2 text-muted">Total Views {{$tracker_info[0]->host}}</h6>
+      <h6 class="card-subtitle mb-2 text-muted">Total Views: {{$tracker_info[0]->view_count}}</h6>
+      <h6 class="card-subtitle mb-2 text-muted">Host Type: {{$tracker_info[0]->host}}</h6>
       <p class="card-text">Created on : {{$tracker_info[0]->created_at}}</p>
       <p class="card-text">Last Updated on : {{$tracker_info[0]->updated_at}}</p>
       <p class="card-text">Remark : {{$tracker_info[0]->remark}}</p>

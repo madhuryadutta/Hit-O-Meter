@@ -12,8 +12,10 @@
           <thead>
               <tr class="table-success">
                   <th>Tracker ID</th>
-                  <th>Host Name</th>
+                  <th>Host Type</th>
+                  <th>Friendly Name</th>
                   <th>Total Visitors</th>
+                  <th>Remark</th>
                   <th>Created On</th>
                   <th>Action</th>
               </tr>
@@ -23,15 +25,17 @@
               <tr class="table-dark">
                   <th scope="row">{{$tracker->tracking_no}}</td>
                   <td>{{$tracker->host}}</td>
+                  <td>{{$tracker->friendly_name}}</td>
                   <td>{{$tracker->view_count}}</td>
+                  <td>{{$tracker->remark}}</td>
                   <td>{{$tracker->updated_at}}</td>
                   {{-- <td>{{$tracker->customer_dob}}</td> --}}
                   {{-- optional format using user define function in helper.php file  --}}
               <td>
                   {{-- <a href="{{url('customer/delete')}}/{{$tracker->customer_id}}"> </a> --}}
-                      <a href="{{route('tracker.delete',['id' =>$tracker->tracking_no])}}">
+                      {{-- <a href="{{route('tracker.delete',['id' =>$tracker->tracking_no])}}">
                       <button class="btn btn-danger">Delete</button>
-                  </a>
+                  </a> --}}
                   {{-- <a href="{{route('tracker.edit',['id' =>$tracker->tracking_no])}}">
                       <button class="btn btn-primary">Update</button>
                   </a> --}}

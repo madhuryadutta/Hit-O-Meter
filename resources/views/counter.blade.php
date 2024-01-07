@@ -3,7 +3,7 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> --}}
     <style>
         * {
             box-sizing: border-box;
@@ -62,8 +62,9 @@
         <div class="column">
             <div class="card">
                 <p><i class="fa fa-user"></i></p>
-                <h3>11+</h3>
+                <h3 style="color: red">{{$updatedCount}}+</h3>
                 <p>Page View</p>
+                
             </div>
         </div>
     </div>
@@ -71,20 +72,3 @@
 </body>
 
 </html>
-
-
-
-
-
-<div>
-    <iframe id="inlineFrameExample"
-        title="Inline Frame Example"
-        width="300"
-        height="200"
-        src="/track/fsdfsdf">
-    </iframe>
-  </div>
-
-
-
-<iframe src="/track/fsdfsdf"></iframe>

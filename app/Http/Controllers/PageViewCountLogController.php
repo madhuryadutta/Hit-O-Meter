@@ -40,9 +40,10 @@ class PageViewCountLogController extends Controller
         $old_count = $tracker->view_count;
         $tracker->view_count = $old_count + 1;
         $tracker->save();
-        echo  $tracker->view_count;
-
-        // return view('demowithdata')->with($data);
+        // echo  $tracker->view_count;
+        $updatedCount = $tracker->view_count;
+        $data = compact('updatedCount');
+        return view('counter')->with($data);
     }
     public function logView($number, $optional = null)
     {
