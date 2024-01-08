@@ -45,14 +45,13 @@ class PageViewCountLinkCreationController extends Controller
         }
 
         try {
-            //write your codes here
             create_tracker();
         } catch (\Throwable $e) {
             // dd($e->getMessage());
             $users = DB::table('users')->get();
             if (count($users) < 1) {
                 DB::table('users')->insert([
-                    'id' => 1, 'name' => 'Test', 'email' => 'test@example.com', 'password' => 'password'
+                    'id' => 1, 'name' => 'Test', 'email' => 'test@example.com', 'password' => '$2y$12$nTEasgNYfH9i7kjBdAPjU.O0HQ7xlwgccwiEoU5CF23NhaPpntqlu'
                 ]);
             };
             create_tracker();
