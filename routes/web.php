@@ -18,21 +18,35 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-Route::get('/login', [LoginController::class, 'view'])->name('login');
-Route::post('/login_request', [LoginController::class, 'authenticate']);
-Route::post('/register', [LoginController::class, 'register']);
+Route::get('/', function () {
+    return view('homepage');
+});
+
+Route::controller(LoginController::class)->group(function () {
+    Route::get('/login', 'loginView')->name('login');
+    Route::post('/login_request', 'authenticate');
+    Route::post('/register', 'registerView');
+    Route::post('/register_request', 'register');
+    Route::get('/logout', 'logout');
+});
 
 
 
+Route::middleware(['auth'])->group(function () {
+    Route::controller(PageViewCountLinkCreationController::class)->group(function () {
+        Route::get('/dashboard', 'view')->name('tracker.list');
+        Route::get('/tracker/view',  'index')->name('tracker.view');
+        Route::get('/tracker/delete/{id}', 'destroy')->name('tracker.delete');
+        // Route::get('/customer/edit/{id}', 'edit')->name('tracker.edit');
+        // Route::post('/customer/update/{id}',[CustomerController::class,'update'])->name('customer.update');
+    });
+});
 
-Route::get('/', [PageViewCountLinkCreationController::class, 'view'])->name('tracker.list');
-Route::get('/new_tracker_form', [PageViewCountLinkCreationController::class, 'index'])->name('tracker.create');
-Route::post('/new_tracker', [PageViewCountLinkCreationController::class, 'store'])->name('tracker.save');
-Route::get('/tracker/view', [PageViewCountLinkCreationController::class, 'index'])->middleware('auth')->name('tracker.view');
-Route::get('/customer/delete/{id}', [PageViewCountLinkCreationController::class, 'destroy'])->name('tracker.delete');
-Route::get('/customer/edit/{id}', [PageViewCountLinkCreationController::class, 'edit'])->name('tracker.edit');
-// Route::post('/customer/update/{id}',[CustomerController::class,'update'])->name('customer.update');
-
+Route::controller(PageViewCountLinkCreationController::class)->group(function () {
+    Route::get('/new_tracker_form',  'index')->name('tracker.create');
+    Route::post('/new_tracker', 'store')->name('tracker.save');
+    Route::get('/tracker/view',  'index')->name('tracker.view');
+});
 
 // Main link for performing all logic 
 Route::get('/track/{number}/{optional?}', [PageViewCountLogController::class, 'log'])->name('track.log');

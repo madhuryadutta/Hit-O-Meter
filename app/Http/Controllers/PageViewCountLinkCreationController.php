@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\PageViewCountLinkCreation;
 
 use Illuminate\Support\Facades\DB;
+
+use function PHPSTORM_META\type;
 
 class PageViewCountLinkCreationController extends Controller
 {
@@ -16,27 +19,41 @@ class PageViewCountLinkCreationController extends Controller
 
     public function view()
     {
-        $trackers = PageViewCountLinkCreation::all();
-        $data = compact('trackers');
-        return view('trackers')->with($data);
+        $user_obj = Auth::user();
+        $current_user_id = Auth::id();
+        $trackers = DB::table('page_view_count_link_creations')->where('user_id', $current_user_id);
+        $trackers = $trackers->get();
+        return view('trackers', ['trackers' => $trackers]);
     }
 
     public function store(Request $request)
     {
-        global $t, $date;
+        global $t, $date, $validation_host_type, $validation_friendly_name, $validation_remark, $generate_security_code, $current_user_id, $user_details, $generate_tracker_id;
+
+        $auth_status = auth()->check();
+        if ($auth_status == 1) {
+            $user_obj = Auth::user();
+            $user_details = array("name" => $user_obj->name, "email" => $user_obj->email);
+            $current_user_id = Auth::id();
+        } else {
+            $current_user_id = 1;
+            $user_details = array("name" => "Annonymous", "email" => "Annonymous@who-m-i.com");
+        }
+
         function create_tracker()
         {
-            global $t, $date;
+            global $t, $date, $validation_host_type, $validation_friendly_name, $validation_remark, $generate_security_code, $current_user_id, $generate_tracker_id;
             $t = time();
             $date = date('Ymd');
+            $generate_tracker_id = $date . $t;
             $validation_host_type = $request['host_type'] ?? "html";
             $validation_remark = $request['remark'] ?? "This is a system generated remark";
             $validation_friendly_name = $request['friendly_name'] ?? 'Serendipity-Euphoria-Pluviophile-Idyllic-Aurora';
             $generate_security_code = md5($t);
             $new_tracker = new PageViewCountLinkCreation;
-            $new_tracker->tracking_no = $date . $t;
+            $new_tracker->tracking_no = $generate_tracker_id;
             $new_tracker->friendly_name = $validation_friendly_name;
-            $new_tracker->user_id = 1;
+            $new_tracker->user_id = $current_user_id;
             $new_tracker->host = $validation_host_type;
             $new_tracker->view_count = 0;
             $new_tracker->remark = $validation_remark;
@@ -56,16 +73,18 @@ class PageViewCountLinkCreationController extends Controller
             };
             create_tracker();
         } finally {
-            return redirect('/');
+            $data1 = array('tracker_no' => $generate_tracker_id, 'host_type' => $validation_host_type, "seurity_key" => $generate_security_code, 'friendly_name' => $validation_friendly_name, 'remark' => $validation_remark, 'creator' => $user_details['name'], 'creator_mail' => $user_details['email']);
+            $data = compact('data1');
+            return view('sucessfullTrackerCreation')->with($data);
         }
     }
 
-    // public function destroy($id)
-    // {
-    //     //    echo $id;
-    //     $tracker = Customer::where('customer_id', $id)->delete();
-    //     return redirect('customer/view');
-    // }
+    public function destroy($id)
+    {
+        //    echo $id;
+        $tracker = PageViewCountLinkCreation::where('tracking_no', $id)->delete();
+        return redirect('/dashboard');
+    }
 
     // public function edit($id)
     // {

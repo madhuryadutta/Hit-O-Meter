@@ -21,6 +21,7 @@
               </tr>
           </thead>
           <tbody>
+
               @foreach ($trackers as $tracker)
               <tr class="table-dark">
                   <th scope="row">{{$tracker->tracking_no}}</td>
@@ -32,10 +33,9 @@
                   {{-- <td>{{$tracker->customer_dob}}</td> --}}
                   {{-- optional format using user define function in helper.php file  --}}
               <td>
-                  {{-- <a href="{{url('customer/delete')}}/{{$tracker->customer_id}}"> </a> --}}
-                      {{-- <a href="{{route('tracker.delete',['id' =>$tracker->tracking_no])}}">
+                      <a href="{{route('tracker.delete',['id' =>$tracker->tracking_no])}}">
                       <button class="btn btn-danger">Delete</button>
-                  </a> --}}
+                  </a>
                   {{-- <a href="{{route('tracker.edit',['id' =>$tracker->tracking_no])}}">
                       <button class="btn btn-primary">Update</button>
                   </a> --}}

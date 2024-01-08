@@ -11,9 +11,23 @@ use App\Models\User;
 
 class LoginController extends Controller
 {
-    public function view()
+    public function loginView()
     {
-        return view('login_form');
+        $auth_status = auth()->check();
+        if ($auth_status == 1) {
+            return redirect('/dashboard');
+        } else {
+            return view('login_form');
+        }
+    }
+    public function registerView()
+    {
+        $auth_status = auth()->check();
+        if ($auth_status == 1) {
+            return redirect('/dashboard');
+        } else {
+            return view('login_form');
+        }
     }
     // public function register(Request $request): RedirectResponse
     public function register(Request $request)
@@ -37,11 +51,12 @@ class LoginController extends Controller
         $new_user->email = $request->email;
         $new_user->password = Hash::make($request->password);
         $new_user->save();
+        Auth::login($new_user);
+        return redirect('/dashboard');
 
 
         // event(new Registered($user));
 
-        // Auth::login($user);
     }
     /**
      * Handle an authentication attempt.
@@ -63,5 +78,15 @@ class LoginController extends Controller
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
+    }
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }
