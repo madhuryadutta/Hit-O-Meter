@@ -48,6 +48,15 @@ Route::controller(PageViewCountLinkCreationController::class)->group(function ()
     Route::get('/tracker/view',  'index')->name('tracker.view');
 });
 
+// for testing
+Route::controller(PageViewCountLogController::class)->group(function () {
+    Route::get('/logtest',  'logtest')->name('logtest.1');
+    Route::get('/logtest2',  'logtest2')->name('logtest.2');
+    Route::get('/logtest3',  'logtest3')->name('logtest.3');
+    Route::get('/logtest4',  'logtest4')->name('logtest.4');
+});
+// for testing
+
 // Main link for performing all logic 
 Route::get('/track/{number}/{optional?}', [PageViewCountLogController::class, 'log'])->name('track.log');
 

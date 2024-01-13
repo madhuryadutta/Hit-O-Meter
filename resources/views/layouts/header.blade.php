@@ -27,7 +27,13 @@
               <span class="visually-hidden">(current)</span>
             </a>
           </li>
+          @guest
           <li class="nav-item">
+            <a class="nav-link active" href="/login">Sign in/sign Up
+            </a>
+          </li>
+          @endguest
+          {{-- <li class="nav-item">
             <a class="nav-link" href="#">Features</a>
           </li>
           <li class="nav-item">
@@ -35,18 +41,19 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">About</a>
-          </li>
+          </li> --}}
+        </li>
+        @auth
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
               aria-expanded="false">Profile</a>
             <div class="dropdown-menu">
+              {{-- <a class="dropdown-item" href="#">Another action</a> --}}
               <a class="dropdown-item" href="/logout">Log Out</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-              <div class="dropdown-divider"></div>
+              {{-- <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Separated link</a>
-            </div>
-          </li>
+            </div> --}}
+          @endauth
         </ul>
         <!-- <form class="d-flex">
           <input class="form-control me-sm-2" type="search" placeholder="Search">

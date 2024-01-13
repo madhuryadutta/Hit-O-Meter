@@ -21,8 +21,9 @@ class PageViewCountLinkCreationController extends Controller
     {
         $user_obj = Auth::user();
         $current_user_id = Auth::id();
-        $trackers = DB::table('page_view_count_link_creations')->where('user_id', $current_user_id);
-        $trackers = $trackers->get();
+        // $trackers = DB::table('page_view_count_link_creations')->where('user_id', $current_user_id);
+        $trackers = DB::select('select * from page_view_count_link_creations where user_id=? and soft_del=?', [$current_user_id, 0]);
+        // $trackers = $trackers->get();
         return view('trackers', ['trackers' => $trackers]);
     }
 
@@ -82,7 +83,12 @@ class PageViewCountLinkCreationController extends Controller
     public function destroy($id)
     {
         //    echo $id;
-        $tracker = PageViewCountLinkCreation::where('tracking_no', $id)->delete();
+        // $tracker = PageViewCountLinkCreation::where('tracking_no', $id)->delete();
+        $current_user_id = Auth::id();
+        $affected = DB::update(
+            'update page_view_count_link_creations set soft_del = 1 where tracking_no = ? and user_id=?',
+            [$id, $current_user_id]
+        );
         return redirect('/dashboard');
     }
 
