@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('view_count');
             $table->string('remark')->nullable();
             $table->boolean('soft_del')->default(0);
+            $table->string('security_code');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

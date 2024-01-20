@@ -2,7 +2,7 @@
   <div class="container" style=" width: auto;
   max-width: 680px;
   padding: 0 15px;">
-    <span class="text-body-secondary"> <p>Copyright &copy; 2023 <img src="https://databytedigital.com/logo.png" alt="logo" height="50px" width="50px"> All Rights Reserved.</p></span>
+    <span class="text-body-secondary"> <p>Copyright &copy; 2023-24 <img src="https://databytedigital.com/logo.png" alt="logo" height="50px" width="50px"> All Rights Reserved.</p></span>
   </div>
 </footer>
 

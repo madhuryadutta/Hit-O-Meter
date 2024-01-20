@@ -16,8 +16,10 @@
 
 ##  Quick start
 
-To get started using Statically, visit [our website](https://hitometer.databytedigital.com) today!
+To get started using Hit-O-Meter, visit [our website](https://hitometer.databytedigital.com) today!
 
+##  Visitors 
+![Hit-O-Meter](https://hitometer.databytedigital.com//track/202401261704742917)
 
  <!-- php artisan make migration create_page_view_count_link_creation_table
  php artisan make:migration create_page_view_count_log_table
