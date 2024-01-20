@@ -5,11 +5,18 @@
   @stack('title')
   <!-- Required meta tags -->
   <meta charset="utf-8">
+  <meta name="description" content="Hit-O-Meter is a Tools for Counting Profile/Page/Visitor View Count build using PHP (Laravel)">
+  <meta name="keywords" content="Hit-O-Meter ,hitometer Tools, Profile View Count,Page View Count ,Visitor View Count">
+  <meta name="author" content="Madhurya Dutta">
+  <meta name="robots" content="index, follow">
+  <meta name="revisit-after" content="1 days">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://asset.databytedigital.com/bootstrap/theme/superhero/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://asset.databytedigital.com/bootstrap/theme/superhero/css/bootstrap-icons.min.css">
   <link rel="stylesheet" href="https://asset.databytedigital.com/bootstrap/theme/superhero/css/prism-okaidia.css">
   <!-- <link rel="stylesheet" href="https://asset.databytedigital.com/bootstrap/theme/superhero/css/custom.min.css"> -->
+  
 </head>
 
 <body>

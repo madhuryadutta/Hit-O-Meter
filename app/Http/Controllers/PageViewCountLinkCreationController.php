@@ -14,7 +14,7 @@ class PageViewCountLinkCreationController extends Controller
 {
     public function index()
     {
-        return view('welcome');
+        return view('homepage');
     }
 
     public function view()

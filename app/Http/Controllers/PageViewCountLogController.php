@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\PageViewCountLog;
 use App\Models\PageViewCountLinkCreation;
+use Illuminate\Support\Facades\Storage;
 
 
 class PageViewCountLogController extends Controller
@@ -22,14 +23,20 @@ class PageViewCountLogController extends Controller
         $sec_ch_ua = $request->header('sec-ch-ua');
         $platform = $request->header('sec-ch-ua-platform');
         $user_agent = $request->header('user-agent');
-        // // use for a proxy server or load balancer
-        $clientIpAddress = $request->getClientIp();
 
+        // // use for a proxy server or load balancer. Doesn't work with docker and nginx reverse proxy setup (returns internal ip)
+        // $clientIpAddress = $request->getClientIp();
+
+        // $clientIpAddress = $request->header('X-Forwarded-For');
+        $clientIpAddress = $_SERVER['X-Forwarded-For'];
+        
         $track_log = new PageViewCountLog;
         // $new_tracker->tracking_no = $request['u_name'];
         $track_log->fk_tracking_no = $number;
-        $track_log->ip_address = $clientIpAddress;
-        $track_log->geolocation = 'N/A';
+        $track_log->ip_address = $clientIpAddress ?? $request->getClientIp();
+        // $track_log->geolocation = 'N/A';
+        // $track_log->geolocation = $request->header('Cf-Ipcountry') ?? 'N/A';
+        $track_log->geolocation = $_SERVER['Cf-Ipcountry'] ?? 'N/A';
         $track_log->user_agent = $user_agent;
         // $track_log->host = $Host;
         $track_log->referer = $referer;
@@ -42,8 +49,27 @@ class PageViewCountLogController extends Controller
         $tracker->save();
         // echo  $tracker->view_count;
         $updatedCount = $tracker->view_count;
+        // echo $updatedCount;
         $data = compact('updatedCount');
-        return view('counter')->with($data);
+
+        // $pathToFile = 'favicon.ico';
+        // return response()->file($pathToFile);
+
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg">
+        <g>
+          <rect x="0" y="0" width="300" height="100" fill="red"></rect>
+          <text x="10" y="50" font-family="Verdana" font-size="35" fill="blue">Profile View:' . $updatedCount . '</text>
+        </g>
+      </svg>';
+        $file_name = $number . '.svg';
+        Storage::disk('public')->put($file_name, $svg);
+        // return $svg;
+
+        $pathToFile = 'storage/' . $file_name;
+        return response()->file($pathToFile);
+        // redirect($pathToFile);
+
+        // return view('counter')->with($data);
     }
     public function logView($number, $optional = null)
     {
