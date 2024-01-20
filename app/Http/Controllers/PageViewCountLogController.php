@@ -27,16 +27,16 @@ class PageViewCountLogController extends Controller
         // // use for a proxy server or load balancer. Doesn't work with docker and nginx reverse proxy setup (returns internal ip)
         // $clientIpAddress = $request->getClientIp();
 
-        // $clientIpAddress = $request->header('X-Forwarded-For');
-        $clientIpAddress = $_SERVER['X-Forwarded-For'];
+        $clientIpAddress = $request->header('X-Forwarded-For');
+        // $clientIpAddress = $_SERVER['X-Forwarded-For'];
         
         $track_log = new PageViewCountLog;
         // $new_tracker->tracking_no = $request['u_name'];
         $track_log->fk_tracking_no = $number;
         $track_log->ip_address = $clientIpAddress ?? $request->getClientIp();
         // $track_log->geolocation = 'N/A';
-        // $track_log->geolocation = $request->header('Cf-Ipcountry') ?? 'N/A';
-        $track_log->geolocation = $_SERVER['Cf-Ipcountry'] ?? 'N/A';
+         $track_log->geolocation = $request->header('Cf-Ipcountry') ?? 'N/A';
+        //$track_log->geolocation = $_SERVER['Cf-Ipcountry'] ?? 'N/A';
         $track_log->user_agent = $user_agent;
         // $track_log->host = $Host;
         $track_log->referer = $referer;

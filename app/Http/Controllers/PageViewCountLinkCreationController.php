@@ -41,7 +41,7 @@ class PageViewCountLinkCreationController extends Controller
             $user_details = array("name" => "Annonymous", "email" => "Annonymous@who-m-i.com");
         }
 
-        function create_tracker()
+        function create_tracker(Request $request)
         {
             global $t, $date, $validation_host_type, $validation_friendly_name, $validation_remark, $generate_security_code, $current_user_id, $generate_tracker_id;
             $t = time();
@@ -63,7 +63,7 @@ class PageViewCountLinkCreationController extends Controller
         }
 
         try {
-            create_tracker();
+            create_tracker($request);
         } catch (\Throwable $e) {
             // dd($e->getMessage());
             $users = DB::table('users')->get();
@@ -72,7 +72,7 @@ class PageViewCountLinkCreationController extends Controller
                     'id' => 1, 'name' => 'Test', 'email' => 'test@example.com', 'password' => '$2y$12$nTEasgNYfH9i7kjBdAPjU.O0HQ7xlwgccwiEoU5CF23NhaPpntqlu'
                 ]);
             };
-            create_tracker();
+            create_tracker($request);
         } finally {
             $data1 = array('tracker_no' => $generate_tracker_id, 'host_type' => $validation_host_type, "seurity_key" => $generate_security_code, 'friendly_name' => $validation_friendly_name, 'remark' => $validation_remark, 'creator' => $user_details['name'], 'creator_mail' => $user_details['email']);
             $data = compact('data1');

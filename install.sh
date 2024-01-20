@@ -5,3 +5,4 @@ php artisan cache:clear
 php artisan config:clear
 php artisan event:cache
 php artisan route:clear
+php artisan storage:link
