@@ -76,6 +76,7 @@ class PageViewCountLogController extends Controller
         $trackers_log = DB::table('page_view_count_logs')
             ->where('fk_tracking_no', '=', $number)
             ->where('soft_del', '=', 0)
+            ->orderBy('id', 'DESC')
             ->get();
         // echo "<pre>";
         // print_r($log_view_data);
@@ -85,6 +86,7 @@ class PageViewCountLogController extends Controller
             ->get();
         // echo "<pre>";
         // print_r($tracker_info);
+        
         $data = compact('trackers_log', 'tracker_info');
         return view('trackers_log')->with($data);
     }

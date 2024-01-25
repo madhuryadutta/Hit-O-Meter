@@ -29,7 +29,8 @@ USER root
 
 # COPY default.conf /etc/apache2/sites-enabled/000-default.conf
 COPY docker/web/default.conf /etc/apache2/sites-available/000-default.conf
+COPY docker/web/mpm_prefork.conf /etc/apache2/mods-available/mpm_prefork.conf 
 
-CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
-
+# CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 EXPOSE 80
+ENTRYPOINT [ "docker/entrypoint.sh" ]

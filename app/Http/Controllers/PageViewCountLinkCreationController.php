@@ -22,7 +22,7 @@ class PageViewCountLinkCreationController extends Controller
         $user_obj = Auth::user();
         $current_user_id = Auth::id();
         // $trackers = DB::table('page_view_count_link_creations')->where('user_id', $current_user_id);
-        $trackers = DB::select('select * from page_view_count_link_creations where user_id=? and soft_del=?', [$current_user_id, 0]);
+        $trackers = DB::select('select * from page_view_count_link_creations where user_id=? and soft_del=? order by created_at desc', [$current_user_id, 0]);
         // $trackers = $trackers->get();
         return view('trackers', ['trackers' => $trackers]);
     }

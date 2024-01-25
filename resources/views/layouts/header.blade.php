@@ -11,7 +11,10 @@
   <meta name="robots" content="index, follow">
   <meta name="revisit-after" content="1 days">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
+  <link rel="icon" type="image/png" href="https://asset.databytedigital.com/media/logo.png" />
+
   <link rel="stylesheet" href="https://asset.databytedigital.com/bootstrap/theme/superhero/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://asset.databytedigital.com/bootstrap/theme/superhero/css/bootstrap-icons.min.css">
   <link rel="stylesheet" href="https://asset.databytedigital.com/bootstrap/theme/superhero/css/prism-okaidia.css">
@@ -31,6 +34,10 @@
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
             <a class="nav-link active" href="/">Home
+              <span class="visually-hidden">(current)</span>
+            </a>
+          <li class="nav-item">
+            <a class="nav-link active" href="{{route('tracker.list')}}">Trackers
               <span class="visually-hidden">(current)</span>
             </a>
           </li>
