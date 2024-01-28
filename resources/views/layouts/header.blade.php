@@ -11,7 +11,7 @@
   <meta name="robots" content="index, follow">
   <meta name="revisit-after" content="1 days">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  
+
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <link rel="icon" type="image/png" href="https://asset.databytedigital.com/media/logo.png" />
 
@@ -19,15 +19,14 @@
   <link rel="stylesheet" href="https://asset.databytedigital.com/bootstrap/theme/superhero/css/bootstrap-icons.min.css">
   <link rel="stylesheet" href="https://asset.databytedigital.com/bootstrap/theme/superhero/css/prism-okaidia.css">
   <!-- <link rel="stylesheet" href="https://asset.databytedigital.com/bootstrap/theme/superhero/css/custom.min.css"> -->
-  
+
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg bg-light " data-bs-theme="light">
     <div class="container-fluid">
       <a class="navbar-brand" href="/"> <b>Hit-O-Meter</b></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03"
-        aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarColor03">
@@ -36,12 +35,7 @@
             <a class="nav-link active" href="/">Home
               <span class="visually-hidden">(current)</span>
             </a>
-          <li class="nav-item">
-            <a class="nav-link active" href="{{route('tracker.list')}}">Trackers
-              <span class="visually-hidden">(current)</span>
-            </a>
-          </li>
-          @guest
+            @guest
           <li class="nav-item">
             <a class="nav-link active" href="/login">Sign in/sign Up
             </a>
@@ -56,18 +50,22 @@
           <li class="nav-item">
             <a class="nav-link" href="#">About</a>
           </li> --}}
-        </li>
-        @auth
+          </li>
+          @auth
+          <li class="nav-item">
+            <a class="nav-link active" href="{{route('tracker.list')}}">Trackers
+              <span class="visually-hidden">(current)</span>
+            </a>
+          </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-              aria-expanded="false">Profile</a>
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
             <div class="dropdown-menu">
               {{-- <a class="dropdown-item" href="#">Another action</a> --}}
               <a class="dropdown-item" href="/logout">Log Out</a>
               {{-- <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Separated link</a>
             </div> --}}
-          @endauth
+              @endauth
         </ul>
         <!-- <form class="d-flex">
           <input class="form-control me-sm-2" type="search" placeholder="Search">
