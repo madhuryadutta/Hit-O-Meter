@@ -13,7 +13,7 @@ sudo docker compose exec webserver php artisan down --render="errors::503" --ref
 #pulling latest code from git 
 # git stash
 git pull
-
+sudo chmod +x docker/entrypoint.sh
 # build container
 sudo docker compose up --build -d
 
@@ -21,7 +21,7 @@ sudo docker compose up --build -d
 sudo docker compose exec webserver php artisan down --render="errors::503" --refresh=15
 sudo docker compose exec webserver composer install --optimize-autoloader --no-dev
 sudo docker compose exec webserver php artisan up
-echo "Application is Upgrade Completed ............ "
+echo "Application Upgrade Completed ............ "
 
 
 

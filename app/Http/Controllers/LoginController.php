@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -52,6 +53,9 @@ class LoginController extends Controller
         $new_user->password = Hash::make($request->password);
         $new_user->save();
         Auth::login($new_user);
+        // Log::debug('We have a new member' . $request->email . ' on our platform.');
+        // Log::emergency('We have a new member' . $request->email . ' on our platform.');
+        // Log::channel('busines_slack')->info('We have a new member {user} on our platform.', ['user' => $request->email]);
         return redirect('/dashboard');
 
 

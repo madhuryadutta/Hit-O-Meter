@@ -54,7 +54,10 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            // 'channels' => ['single','slack'],
+            'channels' => ['daily', 'slack'],
+            // 'channels' => ['daily','slack','busines_slack'],
+            // 'channels' => ['slack'],
             'ignore_exceptions' => false,
         ],
 
@@ -81,6 +84,14 @@ return [
             'level' => env('LOG_LEVEL', 'critical'),
             'replace_placeholders' => true,
         ],
+        'busines_slack' => [
+            'driver' => 'slack',
+            'url' => env('BUSINESS_LOG_SLACK_WEBHOOK_URL'),
+            'username' => 'Business Log',
+            'emoji' => ':boom:',
+            'level' => env('LOG_LEVEL', 'debug'),
+            'replace_placeholders' => true,
+        ],
 
         'papertrail' => [
             'driver' => 'monolog',
@@ -89,7 +100,7 @@ return [
             'handler_with' => [
                 'host' => env('PAPERTRAIL_URL'),
                 'port' => env('PAPERTRAIL_PORT'),
-                'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
+                'connectionString' => 'tls://' . env('PAPERTRAIL_URL') . ':' . env('PAPERTRAIL_PORT'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
         ],

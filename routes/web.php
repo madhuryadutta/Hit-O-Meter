@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -66,6 +67,7 @@ Route::get('/tracker/logs/{number}/{optional?}', [PageViewCountLogController::cl
 
 
 Route::get('/date', function (Request $request) {
+    Log::debug('someone access /date endpoint.');
     $now = new DateTime();
     $str_now = str_replace("-", "", $now->format('Y-m-d'));
     echo ($str_now);

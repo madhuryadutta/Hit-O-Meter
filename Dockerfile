@@ -34,3 +34,15 @@ COPY docker/web/mpm_prefork.conf /etc/apache2/mods-available/mpm_prefork.conf
 # CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 EXPOSE 80
 ENTRYPOINT [ "docker/entrypoint.sh" ]
+
+
+
+
+
+
+# RUN ["chmod", "+x", "docker/entrypoint.sh"]
+# ENTRYPOINT ["docker/entrypoint.sh"]
+# RUN ["chmod", "+x", "./docker/entrypoint.sh"]
+# ENTRYPOINT ["./docker/entrypoint.sh"]
+
+# run chmod +x docker/entrypoint.sh
