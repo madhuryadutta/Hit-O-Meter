@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
-use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -21,6 +21,7 @@ class LoginController extends Controller
             return view('login_form');
         }
     }
+
     public function registerView()
     {
         $auth_status = auth()->check();
@@ -30,12 +31,13 @@ class LoginController extends Controller
             return view('login_form');
         }
     }
+
     // public function register(Request $request): RedirectResponse
     public function register(Request $request)
     {
         $request->validate([
             // 'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             // 'password' => ['required', Rules\Password::defaults()],
             // 'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -48,20 +50,21 @@ class LoginController extends Controller
         // ]);
 
         $new_user = new User;
-        $new_user->name = "A";
+        $new_user->name = 'A';
         $new_user->email = $request->email;
         $new_user->password = Hash::make($request->password);
         $new_user->save();
         Auth::login($new_user);
+
         // Log::debug('We have a new member' . $request->email . ' on our platform.');
         // Log::emergency('We have a new member' . $request->email . ' on our platform.');
         // Log::channel('busines_slack')->info('We have a new member {user} on our platform.', ['user' => $request->email]);
         return redirect('/dashboard');
 
-
         // event(new Registered($user));
 
     }
+
     /**
      * Handle an authentication attempt.
      */
@@ -74,6 +77,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
             return redirect()->intended('/');
         } else {
             echo 'not working';
@@ -83,6 +87,7 @@ class LoginController extends Controller
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
     }
+
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();

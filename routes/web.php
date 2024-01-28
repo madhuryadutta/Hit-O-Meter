@@ -1,13 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PageViewCountLinkCreationController;
 use App\Http\Controllers\PageViewCountLogController;
-use App\Http\Controllers\LoginController;
-use Illuminate\Console\Command;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,12 +30,10 @@ Route::controller(LoginController::class)->group(function () {
     Route::get('/logout', 'logout');
 });
 
-
-
 Route::middleware(['auth'])->group(function () {
     Route::controller(PageViewCountLinkCreationController::class)->group(function () {
         Route::get('/dashboard', 'view')->name('tracker.list');
-        Route::get('/tracker/view',  'index')->name('tracker.view');
+        Route::get('/tracker/view', 'index')->name('tracker.view');
         Route::get('/tracker/delete/{id}', 'destroy')->name('tracker.delete');
         // Route::get('/customer/edit/{id}', 'edit')->name('tracker.edit');
         // Route::post('/customer/update/{id}',[CustomerController::class,'update'])->name('customer.update');
@@ -45,42 +41,38 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::controller(PageViewCountLinkCreationController::class)->group(function () {
-    Route::get('/new_tracker_form',  'index')->name('tracker.create');
+    Route::get('/new_tracker_form', 'index')->name('tracker.create');
     Route::post('/new_tracker', 'store')->name('tracker.save');
-    Route::get('/tracker/view',  'index')->name('tracker.view');
+    Route::get('/tracker/view', 'index')->name('tracker.view');
 });
 
 // for testing
 Route::controller(PageViewCountLogController::class)->group(function () {
-    Route::get('/logtest',  'logtest')->name('logtest.1');
-    Route::get('/logtest2',  'logtest2')->name('logtest.2');
-    Route::get('/logtest3',  'logtest3')->name('logtest.3');
-    Route::get('/logtest4',  'logtest4')->name('logtest.4');
+    Route::get('/logtest', 'logtest')->name('logtest.1');
+    Route::get('/logtest2', 'logtest2')->name('logtest.2');
+    Route::get('/logtest3', 'logtest3')->name('logtest.3');
+    Route::get('/logtest4', 'logtest4')->name('logtest.4');
 });
 // for testing
 
-// Main link for performing all logic 
+// Main link for performing all logic
 Route::get('/track/{number}/{optional?}', [PageViewCountLogController::class, 'log'])->name('track.log');
 
-// Single Tracker Log view 
+// Single Tracker Log view
 Route::get('/tracker/logs/{number}/{optional?}', [PageViewCountLogController::class, 'logView'])->name('tracker.logs');
-
 
 Route::get('/date', function (Request $request) {
     Log::debug('someone access /date endpoint.');
-    $now = new DateTime();
-    $str_now = str_replace("-", "", $now->format('Y-m-d'));
-    echo ($str_now);
+    $now = new DateTime;
+    $str_now = str_replace('-', '', $now->format('Y-m-d'));
+    echo $str_now;
 });
-
-
 
 /*
     |--------------------------------------------------------------------------
-    | Not for Production use 
+    | Not for Production use
     |--------------------------------------------------------------------------
 */
-
 
 // Route::get('/clear-cache', function() {
 //     $exitCode = Artisan::call('cache:clear');
