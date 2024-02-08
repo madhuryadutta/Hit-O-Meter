@@ -19,9 +19,30 @@
 To get started using Hit-O-Meter, visit [our website](https://hitometer.databytedigital.com) today!
 
 ##  Visitors 
-![Hit-O-Meter](https://hitometer.databytedigital.com//track/202401261704742917)
+![Hit-O-Meter](https://hitometer.databytedigital.com/track/202401261704742917)
 
  <!-- php artisan make migration create_page_view_count_link_creation_table
  php artisan make:migration create_page_view_count_log_table
  https://laravel.com/docs/10.x/urls -->
 
+##  Installation
+
+**Method 1: Using Heroku Build pack (Can be used in Herkou and Koyeb)**
+
+the default buildpack is "heroku-php-nginx" .You can find the following code in the Procfile
+
+```
+web: vendor/bin/heroku-php-nginx -C nginx_app.conf /public
+```
+
+You can change that to apache by replacing the Procfile with the following content
+
+```
+web: vendor/bin/heroku-php-apache2 public/
+```
+
+we need to make a change in the "app/Http/Middleware/TrustProxies.php"file by adding wildcard(*) to allow unsecured proxy connection
+
+```
+protected $proxies = '*';
+```
