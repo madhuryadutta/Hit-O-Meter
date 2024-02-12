@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
 
+// Controler #101
+
 class LoginController extends Controller
 {
     public function loginView()
@@ -37,7 +39,7 @@ class LoginController extends Controller
     {
         $request->validate([
             // 'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             // 'password' => ['required', Rules\Password::defaults()],
             // 'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);

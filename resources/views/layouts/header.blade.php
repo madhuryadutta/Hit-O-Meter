@@ -32,9 +32,9 @@
       <div class="collapse navbar-collapse" id="navbarColor03">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link active" href="/">Home
+            {{-- <a class="nav-link active" href="/">Home
               <span class="visually-hidden">(current)</span>
-            </a>
+            </a> --}}
             @guest
           <li class="nav-item">
             <a class="nav-link active" href="/login">Sign in/sign Up
