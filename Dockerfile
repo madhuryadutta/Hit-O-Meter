@@ -1,48 +1,93 @@
-FROM php:8.2-apache
-RUN apt-get update
-RUN apt-get install -y git libzip-dev zip unzip
-# RUN apt-get install -y git libzip-dev zip unzip npm
-RUN docker-php-ext-install pdo pdo_mysql zip
-RUN a2enmod rewrite
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# syntax = docker/dockerfile:experimental
 
+# Default to PHP 8.2, but we attempt to match
+# the PHP version from the user (wherever `flyctl launch` is run)
+# Valid version values are PHP 7.4+
+ARG PHP_VERSION=8.2
+ARG NODE_VERSION=18
+FROM fideloper/fly-laravel:${PHP_VERSION} as base
 
+# PHP_VERSION needs to be repeated here
+# See https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
+ARG PHP_VERSION
 
-RUN groupadd -r app -g 1000 && useradd -u 1000 -r -g app -m -d /app -s /sbin/nologin -c "App user" app && \
-    chmod 755 /var/www/html
+LABEL fly_launch_runtime="laravel"
 
-RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
+# copy application code, skipping files based on .dockerignore
+COPY . /var/www/html
 
-#upload
-RUN echo "file_uploads = On\n" \
-    "memory_limit = 500M\n" \
-    "upload_max_filesize = 500M\n" \
-    "post_max_size = 500M\n" \
-    "max_execution_time = 600\n" \
-    > /usr/local/etc/php/conf.d/uploads.ini
-RUN echo 'ServerName 127.0.0.1' >> /etc/apache2/apache2.conf
-USER app
+RUN composer install --optimize-autoloader --no-dev \
+    && mkdir -p storage/logs \
+    && php artisan optimize:clear \
+    && chown -R www-data:www-data /var/www/html \
+    && sed -i 's/protected \$proxies/protected \$proxies = "*"/g' app/Http/Middleware/TrustProxies.php \
+    && echo "MAILTO=\"\"\n* * * * * www-data /usr/bin/php /var/www/html/artisan schedule:run" > /etc/cron.d/laravel \
+    && cp .fly/entrypoint.sh /entrypoint \
+    && chmod +x /entrypoint
 
-WORKDIR /var/www/html
+# If we're using Octane...
+RUN if grep -Fq "laravel/octane" /var/www/html/composer.json; then \
+        rm -rf /etc/supervisor/conf.d/fpm.conf; \
+        if grep -Fq "spiral/roadrunner" /var/www/html/composer.json; then \
+            mv /etc/supervisor/octane-rr.conf /etc/supervisor/conf.d/octane-rr.conf; \
+            if [ -f ./vendor/bin/rr ]; then ./vendor/bin/rr get-binary; fi; \
+            rm -f .rr.yaml; \
+        else \
+            mv .fly/octane-swoole /etc/services.d/octane; \
+            mv /etc/supervisor/octane-swoole.conf /etc/supervisor/conf.d/octane-swoole.conf; \
+        fi; \
+        rm /etc/nginx/sites-enabled/default; \
+        ln -sf /etc/nginx/sites-available/default-octane /etc/nginx/sites-enabled/default; \
+    fi
 
-USER root
+# Multi-stage build: Build static assets
+# This allows us to not include Node within the final container
+FROM node:${NODE_VERSION} as node_modules_go_brrr
 
-# COPY default.conf /etc/apache2/sites-enabled/000-default.conf
-COPY docker/web/default.conf /etc/apache2/sites-available/000-default.conf
-COPY docker/web/mpm_prefork.conf /etc/apache2/mods-available/mpm_prefork.conf 
+RUN mkdir /app
 
-# CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
-EXPOSE 80
-ENTRYPOINT [ "docker/entrypoint.sh" ]
+RUN mkdir -p  /app
+WORKDIR /app
+COPY . .
+COPY --from=base /var/www/html/vendor /app/vendor
 
+# Use yarn or npm depending on what type of
+# lock file we might find. Defaults to
+# NPM if no lock file is found.
+# Note: We run "production" for Mix and "build" for Vite
+RUN if [ -f "vite.config.js" ]; then \
+        ASSET_CMD="build"; \
+    else \
+        ASSET_CMD="production"; \
+    fi; \
+    if [ -f "yarn.lock" ]; then \
+        yarn install --frozen-lockfile; \
+        yarn $ASSET_CMD; \
+    elif [ -f "pnpm-lock.yaml" ]; then \
+        corepack enable && corepack prepare pnpm@latest-8 --activate; \
+        pnpm install --frozen-lockfile; \
+        pnpm run $ASSET_CMD; \
+    elif [ -f "package-lock.json" ]; then \
+        npm ci --no-audit; \
+        npm run $ASSET_CMD; \
+    else \
+        npm install; \
+        npm run $ASSET_CMD; \
+    fi;
 
+# From our base container created above, we
+# create our final image, adding in static
+# assets that we generated above
+FROM base
 
+# Packages like Laravel Nova may have added assets to the public directory
+# or maybe some custom assets were added manually! Either way, we merge
+# in the assets we generated above rather than overwrite them
+COPY --from=node_modules_go_brrr /app/public /var/www/html/public-npm
+RUN rsync -ar /var/www/html/public-npm/ /var/www/html/public/ \
+    && rm -rf /var/www/html/public-npm \
+    && chown -R www-data:www-data /var/www/html/public
 
+EXPOSE 8080
 
-
-# RUN ["chmod", "+x", "docker/entrypoint.sh"]
-# ENTRYPOINT ["docker/entrypoint.sh"]
-# RUN ["chmod", "+x", "./docker/entrypoint.sh"]
-# ENTRYPOINT ["./docker/entrypoint.sh"]
-
-# run chmod +x docker/entrypoint.sh
+ENTRYPOINT ["/entrypoint"]
