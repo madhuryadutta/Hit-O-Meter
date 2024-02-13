@@ -8,6 +8,7 @@
 .env
 .env.backup
 .env.production
+.env.prod
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -18,3 +19,6 @@ yarn-error.log
 /.idea
 /.vscode
 sample_request_format.txt
+000run.txt
+a.html
+composer.phar

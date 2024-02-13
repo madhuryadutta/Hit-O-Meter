@@ -54,7 +54,10 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            // 'channels' => ['single','slack'],
+            'channels' => ['daily', 'slack'],
+            // 'channels' => ['daily','slack','busines_slack'],
+            // 'channels' => ['slack'],
             'ignore_exceptions' => false,
         ],
 
@@ -79,6 +82,14 @@ return [
             'username' => 'Laravel Log',
             'emoji' => ':boom:',
             'level' => env('LOG_LEVEL', 'critical'),
+            'replace_placeholders' => true,
+        ],
+        'busines_slack' => [
+            'driver' => 'slack',
+            'url' => env('BUSINESS_LOG_SLACK_WEBHOOK_URL'),
+            'username' => 'Business Log',
+            'emoji' => ':boom:',
+            'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
         ],
 
