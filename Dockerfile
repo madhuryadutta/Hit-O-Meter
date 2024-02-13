@@ -23,26 +23,38 @@ RUN echo "file_uploads = On\n" \
 RUN echo 'ServerName 127.0.0.1' >> /etc/apache2/apache2.conf
 USER app
 
+# COPY docker/entrypoint.sh /var/www/html/entrypoint.sh
+# COPY docker/entrypoint.sh /var/www/html/docker/entrypoint.sh
+
 WORKDIR /var/www/html
 
 USER root
 
+# copy files from src folder in the cureent directory to the docker image 
+COPY ./src .
+
+# Install production ready optimize packages 
+RUN composer install --optimize-autoloader --no-dev
+
+# changing follwoing folder permisison to for filesystem , cache and public symbolic
+RUN chmod o+w ./storage/ -R
+RUN chmod o+w ./public/ -R
+RUN chmod o+w ./bootstrap/ -R
+
 # COPY default.conf /etc/apache2/sites-enabled/000-default.conf
+
+
 COPY docker/web/default.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/web/mpm_prefork.conf /etc/apache2/mods-available/mpm_prefork.conf 
-
-# CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
-EXPOSE 80
-ENTRYPOINT [ "docker/entrypoint.sh" ]
-
-
-
-
-
-
 # RUN ["chmod", "+x", "docker/entrypoint.sh"]
 # ENTRYPOINT ["docker/entrypoint.sh"]
 # RUN ["chmod", "+x", "./docker/entrypoint.sh"]
 # ENTRYPOINT ["./docker/entrypoint.sh"]
 
 # run chmod +x docker/entrypoint.sh
+# CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+
+# RUN chmod +x ./docker-entrypoint.sh
+EXPOSE 80
+# ENTRYPOINT [ "./docker/entrypoint.sh" ]
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
