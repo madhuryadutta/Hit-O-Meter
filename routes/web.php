@@ -3,6 +3,7 @@
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PageViewCountLinkCreationController;
 use App\Http\Controllers\PageViewCountLogController;
+use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -46,15 +47,6 @@ Route::controller(PageViewCountLinkCreationController::class)->group(function ()
     Route::get('/tracker/view', 'index')->name('tracker.view');
 });
 
-// for testing
-Route::controller(PageViewCountLogController::class)->group(function () {
-    Route::get('/logtest', 'logtest')->name('logtest.1');
-    Route::get('/logtest2', 'logtest2')->name('logtest.2');
-    Route::get('/logtest3', 'logtest3')->name('logtest.3');
-    Route::get('/logtest4', 'logtest4')->name('logtest.4');
-});
-// for testing
-
 // Main link for performing all logic
 Route::get('/track/{number}/{optional?}', [PageViewCountLogController::class, 'log'])->name('track.log');
 
@@ -74,37 +66,14 @@ Route::get('/date', function (Request $request) {
     |--------------------------------------------------------------------------
 */
 
-// Route::get('/clear-cache', function() {
-//     $exitCode = Artisan::call('cache:clear');
-//     return '<h1>Cache facade value cleared</h1>';
-// });
+// for testing
+Route::controller(TestController::class)->group(function () {
+    Route::get('/logtest', 'logtest')->name('logtest.1');
+    Route::get('/logtest2', 'logtest2')->name('logtest.2');
+    Route::get('/logtest3', 'logtest3')->name('logtest.3');
+    Route::get('/logtest4', 'logtest4')->name('logtest.4');
 
-// //Reoptimized class loader:
-// Route::get('/optimize', function() {
-//     $exitCode = Artisan::call('optimize');
-//     return '<h1>Reoptimized class loader</h1>';
-// });
-
-// //Route cache:
-// Route::get('/route-cache', function() {
-//     $exitCode = Artisan::call('route:cache');
-//     return '<h1>Routes cached</h1>';
-// });
-
-// //Clear Route cache:
-// Route::get('/route-clear', function() {
-//     $exitCode = Artisan::call('route:clear');
-//     return '<h1>Route cache cleared</h1>';
-// });
-
-// //Clear View cache:
-// Route::get('/view-clear', function() {
-//     $exitCode = Artisan::call('view:clear');
-//     return '<h1>View cache cleared</h1>';
-// });
-
-// //Clear Config cache:
-// Route::get('/config-cache', function() {
-//     $exitCode = Artisan::call('config:cache');
-//     return '<h1>Clear Config cleared</h1>';
-// });
+    Route::get('/cache-clear', 'clear_cache')->name('clear-cache');
+    Route::get('/cache-all', 'cache_all')->name('cache-all');
+});
+// for testing
