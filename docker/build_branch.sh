@@ -1,0 +1,26 @@
+mkdir src
+mv artisan ./src
+mv cacert.pem ./src
+mv composer.lock ./src
+mv database ./src
+mv install.sh ./src
+mv phpunit.xml ./src
+mv public ./src
+mv routes ./src
+mv tests ./src
+mv vite.config.js ./src
+mv Procfile ./src
+mv app ./src
+mv bootstrap ./src
+mv composer.json ./src
+mv config ./src
+mv force-upgrade.sh ./src
+mv nginx_app.conf ./src
+mv package.json ./src
+mv pint.json ./src
+mv resources ./src
+mv storage ./src
+mv upgrade.sh ./src
+mv .gitattributes .src
+mv .gitignore .src
+mv .env.example .src
