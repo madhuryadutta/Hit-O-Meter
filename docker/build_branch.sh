@@ -21,6 +21,6 @@ mv pint.json ./src
 mv resources ./src
 mv storage ./src
 mv upgrade.sh ./src
-mv .gitattributes .src
-mv .gitignore .src
-mv .env.example .src
+mv .gitattributes ./src
+mv .gitignore ./src
+mv .env.example ./src
