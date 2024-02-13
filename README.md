@@ -12,7 +12,9 @@
 <p align="center">Tools for Counting Profile/Page/Visitor View Count.</p>
 
 
- [![Better Stack Badge](https://uptime.betterstack.com/status-badges/v3/monitor/z42l.svg)](https://uptime.betterstack.com/?utm_source=status_badge)
+ [![Better Stack Badge](https://uptime.betterstack.com/status-badges/v3/monitor/z42l.svg)](https://uptime.betterstack.com/?utm_source=status_badge) 
+ [![Push to the docker branch and image build test](https://github.com/madhuryadutta/Hit-O-Meter/actions/workflows/Docker.yml/badge.svg)](https://github.com/madhuryadutta/Hit-O-Meter/actions/workflows/Docker.yml)
+[![Laravel Testing](https://github.com/madhuryadutta/Hit-O-Meter/actions/workflows/Testing.yml/badge.svg)](https://github.com/madhuryadutta/Hit-O-Meter/actions/workflows/Testing.yml)
 
 ##  Quick start
 
