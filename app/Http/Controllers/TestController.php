@@ -23,21 +23,21 @@ class TestController extends Controller
         $ipAddress = $request->ip();
         $ipAddresses = $request->ips();
         // $value = $request->cookie('name');
-        echo 'uri is = ' . $uri;
+        echo 'uri is = '.$uri;
         echo '<br>';
-        echo 'urlWithQueryString is = ' . $urlWithQueryString;
+        echo 'urlWithQueryString is = '.$urlWithQueryString;
         echo '<br>';
-        echo 'Host is = ' . $host;
+        echo 'Host is = '.$host;
         echo '<br>';
-        echo 'HTTPHost is = ' . $httpHost;
+        echo 'HTTPHost is = '.$httpHost;
         echo '<br>';
-        echo 'schemeAndHttpHost is = ' . $schemeAndHttpHost;
+        echo 'schemeAndHttpHost is = '.$schemeAndHttpHost;
         echo '<br>';
-        echo 'Method is = ' . $method;
+        echo 'Method is = '.$method;
         echo '<br>';
-        echo 'Value is = ' . $value;
+        echo 'Value is = '.$value;
         echo '<br>';
-        echo 'Single Ip address is = ' . $ipAddress;
+        echo 'Single Ip address is = '.$ipAddress;
         echo '<br>';
         echo 'Array of IP adrees are =';
         var_dump($ipAddresses);
@@ -73,28 +73,29 @@ class TestController extends Controller
     {
 
         // if user from the share internet
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            echo 'IP address = ' . $_SERVER['HTTP_CLIENT_IP'];
+        if (! empty($_SERVER['HTTP_CLIENT_IP'])) {
+            echo 'IP address = '.$_SERVER['HTTP_CLIENT_IP'];
         }
         //if user is from the proxy
-        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            echo 'IP address = ' . $_SERVER['HTTP_X_FORWARDED_FOR'];
+        elseif (! empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            echo 'IP address = '.$_SERVER['HTTP_X_FORWARDED_FOR'];
         }
         //if user is from the remote address
         else {
-            echo 'IP address = ' . $_SERVER['REMOTE_ADDR'];
+            echo 'IP address = '.$_SERVER['REMOTE_ADDR'];
         }
     }
 
     public function clear_cache()
     {
         if (App::environment('local')) {
-            $exitCode = Artisan::call('cache:clear');
-            $exitCode = Artisan::call('view:clear');
+            Artisan::call('cache:clear');
+            Artisan::call('view:clear');
+            Artisan::call('route:clear');
 
-            $exitCode = Artisan::call('route:clear');
+            echo '<script type="text/javascript">alert("'.'Cache Cache cleared'.'")</script>';
 
-            return '<h1>Cache Cache cleared</h1>';
+            return view('homepage');
         } else {
             return view('homepage');
         }
@@ -102,13 +103,12 @@ class TestController extends Controller
 
     public function cache_all()
     {
-        $exitCode = Artisan::call('optimize');
-        $exitCode = Artisan::call('route:cache');
-        $exitCode = Artisan::call('config:cache');
-        $exitCode = Artisan::call('view:cache');
-        $exitCode = Artisan::call('event:cache');
+        Artisan::call('optimize');
+        Artisan::call('route:cache');
+        Artisan::call('config:cache');
+        Artisan::call('view:cache');
+        Artisan::call('event:cache');
+        echo '<h1>Application Cached Sucessfully </h1>';
 
-        // echo '<h1>Application Cached Sucessfully </h1>';
-        return view('homepage');
     }
 }

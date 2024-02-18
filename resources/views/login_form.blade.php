@@ -12,7 +12,7 @@
                 <div class="container">
                     <h1 class="text-center">
                         Login </h1>
-                    <form action="{{secure_url('/login_request')}}" method="POST">
+                    <form action="{{url('/login_request')}}" method="POST">
                         @csrf
 
                         <div class="form-group">
@@ -44,7 +44,7 @@
                 <div class="container">
                     <h1 class="text-center">
                         Register </h1>
-                    <form action="{{secure_url('/register_request')}}" method="POST">
+                    <form action="{{url('/register_request')}}" method="POST">
                         @csrf
 
                         <div class="form-group">

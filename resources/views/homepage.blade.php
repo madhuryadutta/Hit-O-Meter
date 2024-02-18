@@ -41,7 +41,7 @@
     <div class="container" id="create_new_tracker">
         <!-- <h1 class="text-center">
             Create A New Page View Tracker </h1> -->
-        <form action="{{secure_url('/new_tracker')}}" method="POST">
+        <form action="{{url('/new_tracker')}}" method="POST">
             @csrf
 
             <div class="form-group">

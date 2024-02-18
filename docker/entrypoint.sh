@@ -1,26 +1,21 @@
 #!/bin/bash
-echo "Application is almost ready ............ "
+set -e
 
-if [ ! -f "vendor/autoload.php" ]; then
-    composer install --optimize-autoloader --no-dev
-fi
+# Replace the .env file if APP_ENV is set to production
+# if [ "$APP_ENV" = "production" ]; then
+#   cp .env.production .env
+# fi
 
-if [ ! -f ".env" ]; then
-    echo "Creating env file for env $APP_ENV"
-    cp .env.example .env
-else
-    echo "env file exists."
-fi
-
+# Run any other commands needed before starting the server
 php artisan config:cache
 php artisan view:cache
 php artisan route:cache
 php artisan event:cache
 php artisan about
 php artisan route:list
-php artisan config:show database
 php artisan storage:link
 
-echo "Application is Live ............ "
-
-apache2ctl -D FOREGROUND
+echo " ............ "
+echo "---------- Application is ready to Live ............ "
+# Start Apache
+exec "$@"
