@@ -6,8 +6,6 @@ RUN docker-php-ext-install pdo pdo_mysql zip
 RUN a2enmod rewrite
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-
-
 RUN groupadd -r app -g 1000 && useradd -u 1000 -r -g app -m -d /app -s /sbin/nologin -c "App user" app && \
     chmod 755 /var/www/html
 
@@ -31,7 +29,7 @@ WORKDIR /var/www/html
 USER root
 
 # copy files from src folder in the cureent directory to the docker image 
-COPY ./src .
+COPY . .
 
 # Install production ready optimize packages 
 RUN composer install --optimize-autoloader --no-dev
@@ -41,20 +39,22 @@ RUN chmod o+w ./storage/ -R
 RUN chmod o+w ./public/ -R
 RUN chmod o+w ./bootstrap/ -R
 
-# COPY default.conf /etc/apache2/sites-enabled/000-default.conf
-
 
 COPY docker/web/default.conf /etc/apache2/sites-available/000-default.conf
+COPY docker/web/default.conf /etc/apache2/sites-enabled/000-default.conf
 COPY docker/web/mpm_prefork.conf /etc/apache2/mods-available/mpm_prefork.conf 
-# RUN ["chmod", "+x", "docker/entrypoint.sh"]
-# ENTRYPOINT ["docker/entrypoint.sh"]
-# RUN ["chmod", "+x", "./docker/entrypoint.sh"]
-# ENTRYPOINT ["./docker/entrypoint.sh"]
 
-# run chmod +x docker/entrypoint.sh
-# CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+# Copy the entrypoint script into the container
+COPY docker/entrypoint.sh /usr/local/bin/
 
-# RUN chmod +x ./docker-entrypoint.sh
+# Grant execution permissions to the entrypoint script
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Expose port 80
 EXPOSE 80
-# ENTRYPOINT [ "./docker/entrypoint.sh" ]
+
+# Set the entrypoint to execute the entrypoint script
+ENTRYPOINT ["entrypoint.sh"]
+
+# # Start Apache in the foreground
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
