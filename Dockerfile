@@ -34,6 +34,12 @@ COPY . .
 # Install production ready optimize packages 
 RUN composer install --optimize-autoloader --no-dev
 
+# Install production ready optimize node packages 
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - 
+RUN apt-get install -y nodejs
+RUN npm install
+RUN npm run build
+
 # changing follwoing folder permisison to for filesystem , cache and public symbolic
 RUN chmod o+w ./storage/ -R
 RUN chmod o+w ./public/ -R

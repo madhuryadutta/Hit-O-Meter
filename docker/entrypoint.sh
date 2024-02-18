@@ -14,6 +14,8 @@ php artisan event:cache
 php artisan about
 php artisan route:list
 php artisan storage:link
-echo "Application is ready to Live ............ "
+
+echo " ............ "
+echo "---------- Application is ready to Live ............ "
 # Start Apache
 exec "$@"
