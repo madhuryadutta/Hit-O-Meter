@@ -19,11 +19,12 @@ sudo docker compose build --no-cache
 sudo docker compose exec webserver php artisan down --render="errors::503" --refresh=15
 
 # container up (image already build)
-sudo docker compose up --build -d
+# sudo docker compose up --build -d
+sudo docker compose up -d
 
 # running artisan command on the container named "webserver" 
 sudo docker compose exec webserver php artisan down --render="errors::503" --refresh=15
-sudo docker compose exec webserver composer install --optimize-autoloader --no-dev
+# sudo docker compose exec webserver composer install --optimize-autoloader --no-dev
 sudo docker compose exec webserver php artisan up
 echo "Application Upgrade Completed ............ "
 
