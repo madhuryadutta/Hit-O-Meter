@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Config;
 
 // Controler #103
 class PageViewCountLogController extends Controller
@@ -17,6 +18,12 @@ class PageViewCountLogController extends Controller
     public function log(Request $request, $number, $optional = null)
     {
         $count = DB::table('page_view_count_link_creations')->where('tracking_no', $number)->where('soft_del', 0)->selectRaw('count(*) as tracker_exist')->pluck('tracker_exist');
+
+
+     
+
+
+
         if ($count[0] == 1) {
             // $headers_key = ['Host', 'connection', 'sec-ch-ua', 'sec-ch-ua-mobile', 'sec-ch-ua-platform', 'dnt', 'user-agent'];
             // $clientIpAddress = $request->ip();
@@ -36,6 +43,14 @@ class PageViewCountLogController extends Controller
 
             $track_log = new PageViewCountLog;
             // $new_tracker->tracking_no = $request['u_name'];
+
+            $db_type = Config::get('database.default');
+            if( $db_type=='pgsql'){
+                $max_id= DB::select('select id from page_view_count_logs ORDER BY id DESC LIMIT 1');
+                // $max_id= DB::select('select max(id) from page_view_count_logs ');
+                $track_log->id = $max_id[0]->id + 1;
+            }
+
             $track_log->fk_tracking_no = $number;
             $track_log->ip_address = $clientIpAddress ?? $request->getClientIp();
             // $track_log->geolocation = 'N/A';

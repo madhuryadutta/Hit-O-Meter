@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('geolocation')->nullable();
             $table->string('user_agent');
             $table->string('referer')->nullable();
-            $table->boolean('soft_del')->default(0);
+            $table->unsignedBigInteger('soft_del')->default(0);
             $table->foreign('fk_tracking_no')->references('tracking_no')->on('page_view_count_link_creations');
             $table->timestamps();
         });
