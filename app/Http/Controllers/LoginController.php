@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
-use Illuminate\Support\Facades\Config;
 
 // Controler #101
 
@@ -55,10 +55,10 @@ class LoginController extends Controller
 
         $new_user = new User;
         $db_type = Config::get('database.default');
-        if( $db_type=='pgsql'){
-            $max_id= DB::select('select id from users ORDER BY id DESC LIMIT 1');
+        if ($db_type == 'pgsql') {
+            $max_id = DB::select('select id from users ORDER BY id DESC LIMIT 1');
             // $max_id= DB::select('select max(id) from page_view_count_logs ');
-            $new_user->id  = $max_id[0]->id + 1;
+            $new_user->id = $max_id[0]->id + 1;
         }
         $new_user->name = 'A';
         $new_user->email = $request->email;

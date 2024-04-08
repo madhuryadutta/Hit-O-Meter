@@ -7,10 +7,10 @@ use App\Models\PageViewCountLog;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Config;
 
 // Controler #103
 class PageViewCountLogController extends Controller
@@ -26,9 +26,8 @@ class PageViewCountLogController extends Controller
             $referer = $request->header('Referer');
 
             if ($optional == 'mailer') {
-                $referer = 'Mail Track - ' . $request->header('Referer');
+                $referer = 'Mail Track - '.$request->header('Referer');
             }
-
 
             $connection = $request->header('connection');
             $sec_ch_ua = $request->header('sec-ch-ua');
@@ -76,22 +75,22 @@ class PageViewCountLogController extends Controller
             $svg = '<svg xmlns="http://www.w3.org/2000/svg">
         <g>
           <rect x="0" y="0" width="300" height="100" fill="green"></rect>
-          <text x="10" y="50" font-family="Verdana" font-size="35" fill="blue">Profile View:' . $updatedCount . '</text>
+          <text x="10" y="50" font-family="Verdana" font-size="35" fill="blue">Profile View:'.$updatedCount.'</text>
         </g>
       </svg>';
         } else {
             $svg = '<svg xmlns="http://www.w3.org/2000/svg">
         <g>
           <rect x="0" y="0" width="650" height="100" fill="red"></rect>
-          <text x="10" y="50" font-family="Verdana" font-size="35" fill="blue">Invalid ID:' . $number . '</text>
+          <text x="10" y="50" font-family="Verdana" font-size="35" fill="blue">Invalid ID:'.$number.'</text>
         </g>
       </svg>';
         }
         if ($optional == 'mailer') {
             $filename = 'pixel.png';
-            $path = public_path('content/' . $filename);
+            $path = public_path('content/'.$filename);
 
-            if (!file_exists($path)) {
+            if (! file_exists($path)) {
                 abort(404);
             }
 
@@ -100,10 +99,10 @@ class PageViewCountLogController extends Controller
 
             return response($file)->header('Content-Type', $type);
         } else {
-            $file_name = $number . '.svg';
+            $file_name = $number.'.svg';
             Storage::disk('public')->put($file_name, $svg);
             // return $svg;
-            $pathToFile = 'storage/' . $file_name;
+            $pathToFile = 'storage/'.$file_name;
             try {
                 return response()->file($pathToFile);
             } catch (Exception $e) {
@@ -117,10 +116,6 @@ class PageViewCountLogController extends Controller
 
         // return view('counter')->with($data);
     }
-
-
-
-
 
     public function logView($number, $optional = null)
     {
