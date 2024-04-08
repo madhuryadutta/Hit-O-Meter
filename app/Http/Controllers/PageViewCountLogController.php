@@ -18,18 +18,18 @@ class PageViewCountLogController extends Controller
     public function log(Request $request, $number, $optional = null)
     {
         $count = DB::table('page_view_count_link_creations')->where('tracking_no', $number)->where('soft_del', 0)->selectRaw('count(*) as tracker_exist')->pluck('tracker_exist');
-
-
-     
-
-
-
         if ($count[0] == 1) {
             // $headers_key = ['Host', 'connection', 'sec-ch-ua', 'sec-ch-ua-mobile', 'sec-ch-ua-platform', 'dnt', 'user-agent'];
             // $clientIpAddress = $request->ip();
 
             // $Host = $request->header('Host');
             $referer = $request->header('Referer');
+
+            if ($optional == 'mailer') {
+                $referer = 'Mail Track - ' . $request->header('Referer');
+            }
+
+
             $connection = $request->header('connection');
             $sec_ch_ua = $request->header('sec-ch-ua');
             $platform = $request->header('sec-ch-ua-platform');
@@ -45,8 +45,8 @@ class PageViewCountLogController extends Controller
             // $new_tracker->tracking_no = $request['u_name'];
 
             $db_type = Config::get('database.default');
-            if( $db_type=='pgsql'){
-                $max_id= DB::select('select id from page_view_count_logs ORDER BY id DESC LIMIT 1');
+            if ($db_type == 'pgsql') {
+                $max_id = DB::select('select id from page_view_count_logs ORDER BY id DESC LIMIT 1');
                 // $max_id= DB::select('select max(id) from page_view_count_logs ');
                 $track_log->id = $max_id[0]->id + 1;
             }
@@ -76,34 +76,51 @@ class PageViewCountLogController extends Controller
             $svg = '<svg xmlns="http://www.w3.org/2000/svg">
         <g>
           <rect x="0" y="0" width="300" height="100" fill="green"></rect>
-          <text x="10" y="50" font-family="Verdana" font-size="35" fill="blue">Profile View:'.$updatedCount.'</text>
+          <text x="10" y="50" font-family="Verdana" font-size="35" fill="blue">Profile View:' . $updatedCount . '</text>
         </g>
       </svg>';
         } else {
             $svg = '<svg xmlns="http://www.w3.org/2000/svg">
         <g>
           <rect x="0" y="0" width="650" height="100" fill="red"></rect>
-          <text x="10" y="50" font-family="Verdana" font-size="35" fill="blue">Invalid ID:'.$number.'</text>
+          <text x="10" y="50" font-family="Verdana" font-size="35" fill="blue">Invalid ID:' . $number . '</text>
         </g>
       </svg>';
         }
-        $file_name = $number.'.svg';
-        Storage::disk('public')->put($file_name, $svg);
-        // return $svg;
-        $pathToFile = 'storage/'.$file_name;
-        try {
-            return response()->file($pathToFile);
-        } catch (Exception $e) {
-            Artisan::call('storage:link');
-            Log::emergency('There was an Stoarge:Link error which was handle by a exception handling in Controller #103');
-        } finally {
-            return response()->file($pathToFile);
-        }
+        if ($optional == 'mailer') {
+            $filename = 'pixel.png';
+            $path = public_path('content/' . $filename);
 
+            if (!file_exists($path)) {
+                abort(404);
+            }
+
+            $file = file_get_contents($path);
+            $type = mime_content_type($path);
+
+            return response($file)->header('Content-Type', $type);
+        } else {
+            $file_name = $number . '.svg';
+            Storage::disk('public')->put($file_name, $svg);
+            // return $svg;
+            $pathToFile = 'storage/' . $file_name;
+            try {
+                return response()->file($pathToFile);
+            } catch (Exception $e) {
+                Artisan::call('storage:link');
+                Log::emergency('There was an Stoarge:Link error which was handle by a exception handling in Controller #103');
+            } finally {
+                return response()->file($pathToFile);
+            }
+        }
         // redirect($pathToFile);
 
         // return view('counter')->with($data);
     }
+
+
+
+
 
     public function logView($number, $optional = null)
     {
