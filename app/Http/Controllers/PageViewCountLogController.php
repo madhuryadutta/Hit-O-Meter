@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PageViewCountLinkCreation;
 use App\Models\PageViewCountLog;
+use App\Traits\BadgeTrait;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Storage;
 // Controler #103
 class PageViewCountLogController extends Controller
 {
+    use BadgeTrait;
+
     public function log(Request $request, $number, $optional = null)
     {
         $count = DB::table('page_view_count_link_creations')->where('tracking_no', $number)->where('soft_del', 0)->selectRaw('count(*) as tracker_exist')->pluck('tracker_exist');
@@ -72,19 +75,11 @@ class PageViewCountLogController extends Controller
             // $pathToFile = 'favicon.ico';
             // return response()->file($pathToFile);
 
-            $svg = '<svg xmlns="http://www.w3.org/2000/svg">
-        <g>
-          <rect x="0" y="0" width="300" height="100" fill="green"></rect>
-          <text x="10" y="50" font-family="Verdana" font-size="35" fill="blue">Profile View:'.$updatedCount.'</text>
-        </g>
-      </svg>';
+            $svg = $this->generateBadge($updatedCount);
+            echo $svg;
         } else {
-            $svg = '<svg xmlns="http://www.w3.org/2000/svg">
-        <g>
-          <rect x="0" y="0" width="650" height="100" fill="red"></rect>
-          <text x="10" y="50" font-family="Verdana" font-size="35" fill="blue">Invalid ID:'.$number.'</text>
-        </g>
-      </svg>';
+            $svg = $this->notExistBadge($number);
+            echo $svg;
         }
         if ($optional == 'mailer') {
             $filename = 'pixel.png';
@@ -98,20 +93,23 @@ class PageViewCountLogController extends Controller
             $type = mime_content_type($path);
 
             return response($file)->header('Content-Type', $type);
-        } else {
-            $file_name = $number.'.svg';
-            Storage::disk('public')->put($file_name, $svg);
-            // return $svg;
-            $pathToFile = 'storage/'.$file_name;
-            try {
-                return response()->file($pathToFile);
-            } catch (Exception $e) {
-                Artisan::call('storage:link');
-                Log::emergency('There was an Stoarge:Link error which was handle by a exception handling in Controller #103');
-            } finally {
-                return response()->file($pathToFile);
-            }
         }
+        //not sure wheather to store th images or not will check later
+
+        // else {
+        //     $file_name = $number . '.svg';
+        //     Storage::disk('public')->put($file_name, $svg);
+        //     // return $svg;
+        //     $pathToFile = 'storage/' . $file_name;
+        //     try {
+        //         return response()->file($pathToFile);
+        //     } catch (Exception $e) {
+        //         Artisan::call('storage:link');
+        //         Log::emergency('There was an Stoarge:Link error which was handle by a exception handling in Controller #103');
+        //     } finally {
+        //         return response()->file($pathToFile);
+        //     }
+        // }
         // redirect($pathToFile);
 
         // return view('counter')->with($data);

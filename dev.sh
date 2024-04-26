@@ -1,4 +1,4 @@
-sudo composer install
+composer install
 npm install
 cp .env.dev .env
 php artisan key:generate
@@ -8,6 +8,6 @@ touch database.sqlite
 yes | php artisan migrate
 php artisan db:seed
 current_dir=$(pwd)
-path="DB_DATABASE=$current_dir/database.sqlite"
-echo "$path" >> .env
+path="DB_DATABASE='$current_dir/database.sqlite"
+echo "$path'" >> .env
 php artisan serve
