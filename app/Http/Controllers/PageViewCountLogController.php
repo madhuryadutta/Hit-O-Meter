@@ -76,10 +76,10 @@ class PageViewCountLogController extends Controller
             // return response()->file($pathToFile);
 
             $svg = $this->generateBadge($updatedCount);
-            echo $svg;
+            // echo $svg;
         } else {
             $svg = $this->notExistBadge($number);
-            echo $svg;
+            // echo $svg;
         }
         if ($optional == 'mailer') {
             $filename = 'pixel.png';
@@ -96,20 +96,20 @@ class PageViewCountLogController extends Controller
         }
         //not sure wheather to store th images or not will check later
 
-        // else {
-        //     $file_name = $number . '.svg';
-        //     Storage::disk('public')->put($file_name, $svg);
-        //     // return $svg;
-        //     $pathToFile = 'storage/' . $file_name;
-        //     try {
-        //         return response()->file($pathToFile);
-        //     } catch (Exception $e) {
-        //         Artisan::call('storage:link');
-        //         Log::emergency('There was an Stoarge:Link error which was handle by a exception handling in Controller #103');
-        //     } finally {
-        //         return response()->file($pathToFile);
-        //     }
-        // }
+        else {
+            $file_name = $number.'.svg';
+            Storage::disk('public')->put($file_name, $svg);
+            // return $svg;
+            $pathToFile = 'storage/'.$file_name;
+            try {
+                return response()->file($pathToFile);
+            } catch (Exception $e) {
+                Artisan::call('storage:link');
+                Log::emergency('There was an Stoarge:Link error which was handle by a exception handling in Controller #103');
+            } finally {
+                return response()->file($pathToFile);
+            }
+        }
         // redirect($pathToFile);
 
         // return view('counter')->with($data);
