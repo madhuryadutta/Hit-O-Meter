@@ -52,7 +52,7 @@ trait BadgeTrait
         </g>
       </svg>';
         } else {
-            $svg = ' <?xml version="1.0" encoding="UTF-8"?>
+            $svg = '<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="300" height="100">
   <!-- Background Gradient -->
   <defs>
@@ -73,7 +73,7 @@ trait BadgeTrait
   <path d="M160 25 L140 55 L180 55 Z" fill="#ff6f00"/>
   
   <!-- Text -->
-  <text x="60" y="60" font-family="Arial" font-size="24" fill="#333">Invalid ID: '.$number.'</text>
+  <text x="20" y="60" font-family="Arial" font-size="16" fill="#333">Invalid ID: '.$number.'</text>
 </svg>';
         }
 

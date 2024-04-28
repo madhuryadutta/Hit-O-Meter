@@ -80,8 +80,10 @@ class PageViewCountLogController extends Controller
         } else {
             $svg = $this->notExistBadge($number);
             // echo $svg;
+
         }
         if ($optional == 'mailer') {
+
             $filename = 'pixel.png';
             $path = public_path('content/'.$filename);
 
@@ -107,6 +109,9 @@ class PageViewCountLogController extends Controller
                 Artisan::call('storage:link');
                 Log::emergency('There was an Stoarge:Link error which was handle by a exception handling in Controller #103');
             } finally {
+                // $type = mime_content_type($pathToFile);
+                // $file = file_get_contents($pathToFile);
+                // return response($file)->header('Content-Type', $type);
                 return response()->file($pathToFile);
             }
         }
